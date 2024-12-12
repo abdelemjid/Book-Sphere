@@ -1,19 +1,50 @@
+import { Route, Routes } from "react-router";
+import HomePage from "./pages/HomePage";
+import Layout from "./layouts/Layout";
+import LoginPage from "./pages/LoginPage";
+import MyBooksPage from "./pages/MyBooksPage";
+import FavoritePage from "./pages/FavoritePage";
+
 function App() {
   return (
-    <div className="container mx-auto w-full h-screen flex flex-col justify-center items-center gap-5">
-      <h1 className="text-xl text-center">hello world</h1>
-      <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus eaque ipsa nesciunt
-        quia, ut alias voluptate? Cupiditate, temporibus mollitia quia amet eligendi, sapiente ab,
-        soluta voluptate nostrum tenetur deserunt rem? Odio velit, omnis ducimus repellat voluptas
-        est fugit, ipsum eaque pariatur neque, tempore numquam ratione doloribus eligendi suscipit
-        quo. Sed ad animi cupiditate repellat deleniti dolores a molestias omnis rerum. Dolorem,
-        animi blanditiis reiciendis, harum sint exercitationem commodi nemo ex temporibus id, nulla
-        repellat eveniet eligendi earum voluptatum magni pariatur. Similique laborum quisquam
-        voluptatum nihil perferendis at, alias architecto ipsum. Non eos itaque corrupti odit
-        aliquam adipisci eius, aut perspiciatis cum ut eligendi accusantium amet dolorum. Quibusdam
-      </p>
-    </div>
+    <Routes>
+      {/* Homa Page  */}
+      <Route
+        path="/"
+        element={
+          <Layout>
+            <HomePage />
+          </Layout>
+        }
+      />
+      {/* My Books Pages */}
+      <Route
+        path="/my-books"
+        element={
+          <Layout>
+            <MyBooksPage />
+          </Layout>
+        }
+      />
+      {/* Favorite Page */}
+      <Route
+        path="/favorite"
+        element={
+          <Layout>
+            <FavoritePage />
+          </Layout>
+        }
+      />
+      {/* Login Page */}
+      <Route
+        path="/login"
+        element={
+          <Layout>
+            <LoginPage />
+          </Layout>
+        }
+      />
+    </Routes>
   );
 }
 
