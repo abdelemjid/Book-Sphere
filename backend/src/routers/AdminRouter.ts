@@ -13,7 +13,10 @@ router.post(
       .isString()
       .withMessage("Username invalid!"),
     body("email").isEmail().withMessage("Email address invalid!"),
-    body("phoneNumber").isMobilePhone("any").withMessage("Mobile phone number invalid!"),
+    body("phoneNumber")
+      .isNumeric({ no_symbols: true })
+      .isLength({ min: 7 })
+      .withMessage("Mobile phone number invalid!"),
     body("password").isLength({ min: 8 }).withMessage("Password invalid!"),
   ],
   controller.adminRegister as express.RequestHandler

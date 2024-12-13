@@ -1,0 +1,16 @@
+.number-container {
+  font-family: "Montserrat", sans-serif;
+  background-color: rgba(51, 51, 51, 0.911);
+  border-radius: 5px;
+}
+
+.number-input::placeholder {
+  color: #54a787;
+}
+
+.number-button,
+.number-input {
+  color: white;
+  background-color: transparent !important;
+  border: none !important;
+}

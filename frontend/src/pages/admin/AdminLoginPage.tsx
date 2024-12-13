@@ -1,12 +1,11 @@
 import { useForm } from "react-hook-form";
+import { LoginFormValues } from "../../types/Types";
 import { Link } from "react-router";
-import * as apiClient from "../apiClient";
-import { useAuth } from "../contexts/AuthProvider";
-import { LoginFormValues } from "../types/Types";
+import * as apiClient from "../../apiClient";
+import { useAuth } from "../../contexts/AuthProvider";
 
-const LoginPage = () => {
+const AdminLoginPage = () => {
   const { login } = useAuth();
-
   const form = useForm<LoginFormValues>({
     defaultValues: {
       email: "",
@@ -16,28 +15,27 @@ const LoginPage = () => {
   });
 
   const {
-    formState: { errors },
     register,
+    formState: { errors },
     handleSubmit,
   } = form;
 
   const onSubmit = async (values: LoginFormValues) => {
-    const response = await apiClient.loginUser(values);
+    const response = await apiClient.loginAdmin(values);
     const result = await response.json();
     if (!response.ok) {
-      //
       console.log(result.message);
       return;
     }
 
-    login(false);
+    login(true);
   };
 
   return (
     <div className="w-full h-[calc(100vh-136px)] container">
       <div className="h-full flex flex-col items-center justify-center">
         <div className="min-w-[400px] px-10 py-6 rounded-md bg-light-200/50 text-dark-100 dark:text-primary-100 dark:bg-dark-400">
-          <h1 className="text-xl font-semibold my-5">Login</h1>
+          <h1 className="text-xl font-semibold my-5">Admin Login</h1>
           <form className="flex flex-col gap-3" onSubmit={handleSubmit(onSubmit)}>
             {/* Email Input */}
             <div className="w-full flex flex-col gap-1">
@@ -90,8 +88,8 @@ const LoginPage = () => {
           {/* Registeration Link */}
           <p className="text-sm mt-5">
             You don't have account?{" "}
-            <Link to="/register" className="text-third-100">
-              Sign Up
+            <Link to="/admin/register" className="text-third-100">
+              Create Admin Account
             </Link>
           </p>
         </div>
@@ -100,4 +98,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default AdminLoginPage;

@@ -4,6 +4,9 @@ import Layout from "./layouts/Layout";
 import LoginPage from "./pages/LoginPage";
 import MyBooksPage from "./pages/MyBooksPage";
 import FavoritePage from "./pages/FavoritePage";
+import RegisterPage from "./pages/RegisterPage";
+import AdminLoginPage from "./pages/admin/AdminLoginPage";
+import AdminRegisterPage from "./pages/admin/AdminRegisterPage";
 
 function App() {
   return (
@@ -41,6 +44,42 @@ function App() {
         element={
           <Layout>
             <LoginPage />
+          </Layout>
+        }
+      />
+      {/* Login Page */}
+      <Route
+        path="/login"
+        element={
+          <Layout>
+            <LoginPage />
+          </Layout>
+        }
+      />
+      {/* Register Page */}
+      <Route
+        path="/register"
+        element={
+          <Layout>
+            <RegisterPage />
+          </Layout>
+        }
+      />
+      {/* Register Page */}
+      <Route
+        path="/admin/login"
+        element={
+          <Layout>
+            <AdminLoginPage />
+          </Layout>
+        }
+      />
+      {/* Register Page */}
+      <Route
+        path="/admin/register"
+        element={
+          <Layout>
+            <AdminRegisterPage />
           </Layout>
         }
       />

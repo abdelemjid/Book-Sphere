@@ -6,7 +6,30 @@ export default {
   darkMode: "selector",
   // theme
   theme: {
+    fontSize: {
+      xs: "0.4rem", // Override default 0.75rem
+      sm: "0.6rem", // Override default 0.875rem
+      base: "1px", // Keep default 1rem
+      lg: "1rem", // Override default 1.125rem
+      xl: "1.1rem", // Override default 1.25rem
+      "2xl": "1.4rem", // Override default 1.5rem
+      "3xl": "1.8rem", // Override default 1.875rem
+      "4xl": "2rem", // Override default 2.25rem
+      "5xl": "2.5rem", // Keep default 3rem
+      "6xl": "3rem", // Override default 4rem
+    },
     extend: {
+      // Font Size
+      fontSize: {
+        xs: "0.5rem",
+        sm: "0.5rem",
+        base: "0.5rem",
+        xl: "1rem",
+        "2xl": "1.5rem",
+        "3xl": "1.953rem",
+        "4xl": "2.441rem",
+        "5xl": "3.052rem",
+      },
       // Container Margin Sizes
       container: {
         center: true, // Center the container horizontally
@@ -18,18 +41,7 @@ export default {
           xl: "5rem", // Padding for extra-large screens (80px)
         },
       },
-      // Font Size
-      fontSize: {
-        fontSize: {
-          sm: "0.7rem",
-          base: "0.9rem",
-          xl: "1.15rem",
-          "2xl": "1.5rem",
-          "3xl": "1.953rem",
-          "4xl": "2.441rem",
-          "5xl": "3.052rem",
-        },
-      },
+
       // Colors
       colors: {
         accent: {

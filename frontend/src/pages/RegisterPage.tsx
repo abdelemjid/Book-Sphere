@@ -1,14 +1,15 @@
 import { useForm } from "react-hook-form";
 import { Link } from "react-router";
 import * as apiClient from "../apiClient";
+import { UserRegisterFormValues } from "../types/Types";
 import { useAuth } from "../contexts/AuthProvider";
-import { LoginFormValues } from "../types/Types";
 
-const LoginPage = () => {
+const RegisterPage = () => {
   const { login } = useAuth();
 
-  const form = useForm<LoginFormValues>({
+  const form = useForm<UserRegisterFormValues>({
     defaultValues: {
+      username: "",
       email: "",
       password: "",
     },
@@ -21,24 +22,48 @@ const LoginPage = () => {
     handleSubmit,
   } = form;
 
-  const onSubmit = async (values: LoginFormValues) => {
-    const response = await apiClient.loginUser(values);
-    const result = await response.json();
-    if (!response.ok) {
-      //
-      console.log(result.message);
-      return;
-    }
+  const onSubmit = async (values: UserRegisterFormValues) => {
+    try {
+      const response = await apiClient.registerUser(values);
+      const result = await response.json();
+      if (!response.ok) {
+        console.log(result.message);
+        return;
+      }
 
-    login(false);
+      login(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
     <div className="w-full h-[calc(100vh-136px)] container">
       <div className="h-full flex flex-col items-center justify-center">
         <div className="min-w-[400px] px-10 py-6 rounded-md bg-light-200/50 text-dark-100 dark:text-primary-100 dark:bg-dark-400">
-          <h1 className="text-xl font-semibold my-5">Login</h1>
+          <h1 className="text-xl font-semibold my-5">Sign Up</h1>
           <form className="flex flex-col gap-3" onSubmit={handleSubmit(onSubmit)}>
+            {/* Username Input */}
+            <div className="w-full flex flex-col gap-1">
+              <input
+                className="w-full py-1 px-3 rounded-md border-2 placeholder:text-secondary-400 border-transparent focus:border-secondary-100 outline-none bg-light-300 dark:bg-light-400/20 focus:bg-light-200/20"
+                type="text"
+                id="username"
+                placeholder="Username"
+                {...register("username", {
+                  required: {
+                    value: true,
+                    message: "Username is required",
+                  },
+                  validate: (value) => {
+                    return value.trim().length >= 3 || "Enter a valide name";
+                  },
+                })}
+              />
+              <span className="place-self-end text-xs font-semibold text-red-500">
+                {errors?.username?.message}
+              </span>
+            </div>
             {/* Email Input */}
             <div className="w-full flex flex-col gap-1">
               <input
@@ -89,9 +114,9 @@ const LoginPage = () => {
           </form>
           {/* Registeration Link */}
           <p className="text-sm mt-5">
-            You don't have account?{" "}
-            <Link to="/register" className="text-third-100">
-              Sign Up
+            You already have an account?{" "}
+            <Link to="/login" className="text-third-100">
+              Login
             </Link>
           </p>
         </div>
@@ -100,4 +125,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default RegisterPage;
