@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { validationResult } from "express-validator";
 import { AdminModel } from "../models/AdminModel";
+import { BookModel } from "../models/BookModel";
 
 /**
  * adminRegister - @async Function that register admins and generates admin token
@@ -81,4 +82,17 @@ const adminLogin = async (req: Request, res: Response): Promise<Response | void>
   }
 };
 
-export { adminRegister, adminLogin };
+const adminBooks = async (req: Request, res: Response): Promise<Response | void> => {
+  try {
+    const adminId = req.adminId;
+    const books = await BookModel.find({ adminId });
+
+    if (!books) return res.status(404).json({ message: "No books found!" });
+
+    return res.status(200).json(books);
+  } catch (error) {
+    return res.status(500).json({ message: "Something went wrong!" });
+  }
+};
+
+export { adminRegister, adminLogin, adminBooks };

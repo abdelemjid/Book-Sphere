@@ -27,6 +27,8 @@ export const registerUser = async (values: UserRegisterFormValues): Promise<Resp
   return response;
 };
 
+//----------------------- ADMIN -----------------------
+
 export const loginAdmin = async (values: LoginFormValues): Promise<Response> => {
   return fetch(`${backendUrl}/api/admin/login`, {
     method: "post",
@@ -44,5 +46,12 @@ export const registerAdmin = async (values: AdminRegisterFormValues): Promise<Re
       "content-type": "application/json",
     },
     body: JSON.stringify(values),
+  });
+};
+
+export const adminBooks = async (): Promise<Response> => {
+  return fetch(`${backendUrl}/api/admin/books`, {
+    method: "get",
+    credentials: "include",
   });
 };

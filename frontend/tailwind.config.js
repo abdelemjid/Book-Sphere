@@ -6,24 +6,21 @@ export default {
   darkMode: "selector",
   // theme
   theme: {
-    fontSize: {
-      xs: "0.4rem", // Override default 0.75rem
-      sm: "0.6rem", // Override default 0.875rem
-      base: "1px", // Keep default 1rem
-      lg: "1rem", // Override default 1.125rem
-      xl: "1.1rem", // Override default 1.25rem
-      "2xl": "1.4rem", // Override default 1.5rem
-      "3xl": "1.8rem", // Override default 1.875rem
-      "4xl": "2rem", // Override default 2.25rem
-      "5xl": "2.5rem", // Keep default 3rem
-      "6xl": "3rem", // Override default 4rem
-    },
     extend: {
+      // Custom screen
+      screens: {
+        "sm-hidden": {
+          raw: "(max-width: 640px)",
+        },
+        "md-flex": {
+          raw: "(min-width: 768px)",
+        },
+      },
       // Font Size
       fontSize: {
         xs: "0.5rem",
-        sm: "0.5rem",
-        base: "0.5rem",
+        sm: "0.7rem",
+        base: "0.9rem",
         xl: "1rem",
         "2xl": "1.5rem",
         "3xl": "1.953rem",
@@ -83,5 +80,25 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addUtilities }) {
+      addUtilities({
+        ".hidden-sm": {
+          "@screen sm-hidden": {
+            display: "none",
+          },
+        },
+        ".block-sm": {
+          "@screen sm-hidden": {
+            display: "block",
+          },
+        },
+        ".flex-md": {
+          "@screen md-flex": {
+            display: "flex",
+          },
+        },
+      });
+    },
+  ],
 };

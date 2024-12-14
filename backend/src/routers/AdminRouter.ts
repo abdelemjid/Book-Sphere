@@ -1,6 +1,7 @@
 import express from "express";
 import * as controller from "../controllers/AdminController";
 import { body } from "express-validator";
+import verifyAdminToken from "../middleware/AdminAuth";
 
 const router = express.Router();
 
@@ -33,9 +34,14 @@ router.post(
   controller.adminLogin as express.RequestHandler
 );
 
+router.get(
+  "/books",
+  verifyAdminToken as express.RequestHandler,
+  controller.adminBooks as express.RequestHandler
+);
+
 router.post("/new-book");
 router.post("/book/:bookId");
-router.get("/books");
 router.get("/book/:bookId");
 
 export default router;

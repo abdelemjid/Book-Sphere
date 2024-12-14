@@ -5,8 +5,10 @@ import LoginPage from "./pages/LoginPage";
 import MyBooksPage from "./pages/MyBooksPage";
 import FavoritePage from "./pages/FavoritePage";
 import RegisterPage from "./pages/RegisterPage";
-import AdminLoginPage from "./pages/admin/AdminLoginPage";
-import AdminRegisterPage from "./pages/admin/AdminRegisterPage";
+import AdminLoginPage from "./pages/admin/AdminLogin";
+import AdminRegisterPage from "./pages/admin/AdminRegister";
+import AdminHome from "./pages/admin/AdminHome";
+import AdminAddBook from "./pages/admin/AdminAddBook";
 
 function App() {
   return (
@@ -15,7 +17,7 @@ function App() {
       <Route
         path="/"
         element={
-          <Layout>
+          <Layout showHero={true}>
             <HomePage />
           </Layout>
         }
@@ -65,7 +67,7 @@ function App() {
           </Layout>
         }
       />
-      {/* Register Page */}
+      {/* Admin Login Page */}
       <Route
         path="/admin/login"
         element={
@@ -74,12 +76,30 @@ function App() {
           </Layout>
         }
       />
-      {/* Register Page */}
+      {/* Admin Register Page */}
       <Route
         path="/admin/register"
         element={
           <Layout>
             <AdminRegisterPage />
+          </Layout>
+        }
+      />
+      {/* Admin Home Page */}
+      <Route
+        path="/admin"
+        element={
+          <Layout>
+            <AdminHome />
+          </Layout>
+        }
+      />
+      {/* Admin Add Books Page */}
+      <Route
+        path="/admin/add"
+        element={
+          <Layout>
+            <AdminAddBook />
           </Layout>
         }
       />

@@ -18,7 +18,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = (admin: boolean) => {
     setIsAuthenticated(true);
     setIsAdmin(admin);
-    navigate("/");
+    navigate(admin ? "/admin" : "/");
   };
 
   const logout = () => {
