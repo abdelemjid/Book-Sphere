@@ -4,6 +4,7 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import { validationResult } from "express-validator";
 import { AdminModel } from "../models/AdminModel";
 import { BookModel } from "../models/BookModel";
+import { v2 as cloudinary } from "cloudinary";
 
 /**
  * adminRegister - @async Function that register admins and generates admin token
@@ -35,7 +36,7 @@ const adminRegister = async (req: Request, res: Response): Promise<Response | vo
     res.cookie("admin_auth_token", token, {
       httpOnly: true,
       secure: process.env.ENV_MODE === "production",
-      maxAge: 60 * 1000 * 60 * 24,
+      maxAge: 60 * 60 * 1000 * 24,
     });
 
     return res.status(200).json({ message: "Admin registered successfully." });
@@ -66,14 +67,14 @@ const adminLogin = async (req: Request, res: Response): Promise<Response | void>
     const valid = await bcrypt.compare(password, admin.password);
     if (!valid) return res.status(401).json({ message: "Invalide credentials!" });
 
-    const token = jwt.sign({ adminId: admin._id }, process.env.ADMIN_JWT_KEY as string, {
+    const adminToken = jwt.sign({ adminId: admin._id }, process.env.ADMIN_JWT_KEY as string, {
       expiresIn: "1d",
     });
 
-    res.cookie("admin_auth_token", token, {
+    res.cookie("admin_auth_token", adminToken, {
       httpOnly: true,
-      maxAge: 60 * 1000 * 60 * 24,
       secure: process.env.ENV_MODE === "production",
+      maxAge: 60 * 60 * 1000 * 24,
     });
 
     return res.status(200).json({ message: "Logged-in successfully." });
@@ -95,4 +96,39 @@ const adminBooks = async (req: Request, res: Response): Promise<Response | void>
   }
 };
 
-export { adminRegister, adminLogin, adminBooks };
+/**
+ * uploadImage - @async Function that uploads the Book Cover Image to the cloudinary
+ *
+ * @param imageFiles Array of Image URIs
+ * @returns Array of image URLs
+ */
+const uploadImage = async (imageFile: Express.Multer.File) => {
+  const b64 = Buffer.from(imageFile.buffer).toString("base64");
+  let uri = "data:" + imageFile.mimetype + ";base64," + b64;
+  const res = await cloudinary.uploader.upload(uri);
+
+  return res.url;
+};
+
+const addBook = async (req: Request, res: Response): Promise<Response | void> => {
+  // check if there some errors
+  const errors = validationResult(req).array();
+  if (errors?.length) return res.status(400).json({ message: errors[0].msg });
+
+  try {
+    const imageFile = req.file as Express.Multer.File;
+    const imageUrl = await uploadImage(imageFile);
+
+    const book = new BookModel(req.body);
+    book.bookCover = imageUrl;
+    book.adminId = req.adminId;
+    await book.save();
+
+    return res.status(200).json({ message: "Book published successfully.", book });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
+export { adminRegister, adminLogin, adminBooks, addBook };

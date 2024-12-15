@@ -28,6 +28,7 @@ const AdminLoginPage = () => {
       return;
     }
 
+    console.log(result.message);
     login(true);
   };
 

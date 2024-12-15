@@ -23,6 +23,7 @@ export interface AdminRegisterFormValues {
 }
 
 export interface BookType {
+  _id?: string;
   title: string;
   author: string;
   pages: number;
@@ -33,4 +34,5 @@ export interface BookType {
   language: string;
   price: number;
   stockQuantity: number;
+  bookCover: string[];
 }

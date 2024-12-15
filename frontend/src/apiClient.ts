@@ -18,6 +18,7 @@ export const loginUser = async (values: LoginFormValues): Promise<Response> => {
 export const registerUser = async (values: UserRegisterFormValues): Promise<Response> => {
   const response = fetch(`${backendUrl}/api/user/register`, {
     method: "post",
+    credentials: "include",
     headers: {
       "content-type": "application/json",
     },
@@ -32,6 +33,7 @@ export const registerUser = async (values: UserRegisterFormValues): Promise<Resp
 export const loginAdmin = async (values: LoginFormValues): Promise<Response> => {
   return fetch(`${backendUrl}/api/admin/login`, {
     method: "post",
+    credentials: "include",
     headers: {
       "content-type": "application/json",
     },
@@ -42,6 +44,7 @@ export const loginAdmin = async (values: LoginFormValues): Promise<Response> => 
 export const registerAdmin = async (values: AdminRegisterFormValues): Promise<Response> => {
   return fetch(`${backendUrl}/api/admin/register`, {
     method: "post",
+    credentials: "include",
     headers: {
       "content-type": "application/json",
     },
@@ -53,5 +56,13 @@ export const adminBooks = async (): Promise<Response> => {
   return fetch(`${backendUrl}/api/admin/books`, {
     method: "get",
     credentials: "include",
+  });
+};
+
+export const addBook = async (formData: FormData) => {
+  return fetch(`${backendUrl}/api/admin/add-book`, {
+    method: "post",
+    credentials: "include",
+    body: formData,
   });
 };

@@ -13,6 +13,7 @@ const bookSchema = new Schema<BookType>({
   publicationDate: { type: Date, required: true },
   publisher: { type: String, required: true },
   stockQuantity: { type: Number, required: true },
+  bookCover: { type: String, required: true },
 });
 
 export const BookModel: Model<BookType> = mongoose.model<BookType>("book", bookSchema);
