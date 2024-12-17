@@ -28,6 +28,13 @@ export const registerUser = async (values: UserRegisterFormValues): Promise<Resp
   return response;
 };
 
+export const fetchBooks = async () => {
+  return fetch(`${backendUrl}/api/user/books`, {
+    method: "get",
+    credentials: "include",
+  });
+};
+
 //----------------------- ADMIN -----------------------
 
 export const loginAdmin = async (values: LoginFormValues): Promise<Response> => {
@@ -64,5 +71,26 @@ export const addBook = async (formData: FormData) => {
     method: "post",
     credentials: "include",
     body: formData,
+  });
+};
+
+export const validateAuth = async () => {
+  return fetch(`${backendUrl}/api/validate-token`, {
+    method: "post",
+    credentials: "include",
+  });
+};
+
+export const adminLogout = async () => {
+  return fetch(`${backendUrl}/api/admin/logout`, {
+    method: "get",
+    credentials: "include",
+  });
+};
+
+export const userLogout = async () => {
+  return fetch(`${backendUrl}/api/user/logout`, {
+    method: "get",
+    credentials: "include",
   });
 };

@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import { validationResult } from "express-validator";
 import { UserModel } from "../models/UserModel";
 import { env } from "process";
+import { BookModel } from "../models/BookModel";
 
 /**
  * userRegister - @async Function that creates new user if not exists and generates
@@ -84,4 +85,36 @@ const userLogin = async (req: Request, res: Response): Promise<Response | void> 
   }
 };
 
-export { userRegister, userLogin };
+/**
+ * userLogout - @async Function that logs the user out
+ *
+ * @param req Express request for user loging out
+ * @param res Express response
+ * @returns Express Response or void
+ */
+const userLogout = async (req: Request, res: Response): Promise<Response | void> => {
+  try {
+    const token = jwt.sign({}, process.env.USER_JWT_KEY as string, { expiresIn: "0d" });
+
+    res.cookie("user_auth_token", token, {
+      expires: new Date("01/01/1990"),
+      httpOnly: true,
+      secure: process.env.ENV_MODE === "production",
+    });
+
+    return res.status(200).json({ message: "Logged Out Success" });
+  } catch (error) {
+    return res.status(500).json({ message: "Unknown error occured during the logout process!" });
+  }
+};
+
+const userBooks = async (req: Request, res: Response): Promise<Response | void> => {
+  try {
+    const books = await BookModel.find({});
+    return res.status(200).json(books);
+  } catch (error) {
+    return res.status(500).json({ message: "An error occured during fetching books!" });
+  }
+};
+
+export { userRegister, userLogin, userLogout, userBooks };

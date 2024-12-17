@@ -30,9 +30,10 @@ export interface BookType {
   isbn: string;
   publisher: string;
   publicationDate: Date;
-  gener: string[];
+  genres: string[];
   language: string;
+  description: string;
   price: number;
   stockQuantity: number;
-  bookCover: string[];
+  bookCover: string;
 }

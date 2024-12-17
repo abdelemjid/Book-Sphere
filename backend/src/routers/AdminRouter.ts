@@ -42,6 +42,8 @@ router.post(
   controller.adminLogin as express.RequestHandler
 );
 
+router.get("/logout", controller.adminLogout as express.RequestHandler);
+
 router.get(
   "/books",
   verifyAdminToken as express.RequestHandler,
@@ -57,7 +59,12 @@ router.post(
     body("author").notEmpty().withMessage("Author Name is required"),
     body("publisher").notEmpty().withMessage("Publisher Name is required"),
     body("language").notEmpty().withMessage("Book Language is required"),
-    body("genre").isArray().notEmpty().withMessage("Book Genre is required"),
+    body("genres")
+      .isArray()
+      .withMessage("Genres must be an array")
+      .isLength({ min: 1 })
+      .withMessage("A book must have at least one genre")
+      .withMessage("Book Genre is required"),
     body("publicationDate").isDate().notEmpty().withMessage("Publication Date is required"),
     body("pages").isNumeric().notEmpty().withMessage("Book Page Count is required"),
     body("isbn")

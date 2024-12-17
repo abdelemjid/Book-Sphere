@@ -19,9 +19,11 @@ const Hero = () => {
   }, []);
 
   return (
-    <HeroContainer>
-      <HeroSlide index={current.index} image={current.image} phrase={current.phrase} />
-    </HeroContainer>
+    <div className="bg-gradient-to-br from-indigo-600/80 to-blue-500/80">
+      <HeroContainer>
+        <HeroSlide index={current.index} image={current.image} phrase={current.phrase} />
+      </HeroContainer>
+    </div>
   );
 };
 

@@ -2,13 +2,43 @@ import { Link } from "react-router";
 import { useAuth } from "../contexts/AuthProvider";
 import { X } from "lucide-react";
 import { useNavContext } from "../contexts/NavProvider";
+import * as apiClient from "../apiClient";
+import { toast } from "react-toastify";
 
 const MobileNav = () => {
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, logout, isAdmin } = useAuth();
   const { close } = useNavContext();
 
+  const adminLogout = async () => {
+    try {
+      const response = await apiClient.adminLogout();
+      const result = await response.json();
+      if (!response.ok) {
+        toast.error(result.message);
+        return;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    logout();
+  };
+
+  const userLogout = async () => {
+    try {
+      const response = await apiClient.userLogout();
+      const result = await response.json();
+      if (!response.ok) {
+        toast.error(result.message);
+        return;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    logout();
+  };
+
   return (
-    <div className="sm:hidden w-full h-screen overflow-hidden absolute z-50 top-0 left-0 bg-light-400/20 backdrop-blur-sm">
+    <div className="sm:hidden absolute top-0 left-0 w-full h-screen dark:bg-dark-400/10 backdrop-blur-sm">
       {/* Close Button */}
       <button
         onClick={() => close()}
@@ -41,8 +71,10 @@ const MobileNav = () => {
         </Link>
         {isAuthenticated ? (
           <Link
-            onClick={() => {
-              logout();
+            onClick={async () => {
+              if (isAdmin) await adminLogout();
+              else await userLogout();
+
               close();
             }}
             to="/login"

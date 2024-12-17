@@ -2,6 +2,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import { BookType } from "../../types/Types";
 import BookGenre from "../../components/admin/BookGenre";
 import * as apiClient from "../../apiClient";
+import { toast } from "react-toastify";
 
 const AdminAddBook = () => {
   const form = useForm<BookType>({
@@ -12,6 +13,7 @@ const AdminAddBook = () => {
     register,
     formState: { errors },
     handleSubmit,
+    reset,
   } = form;
 
   const onSubmit = async (values: BookType) => {
@@ -21,24 +23,27 @@ const AdminAddBook = () => {
     formData.append("isbn", values.isbn);
     formData.append("language", values.language);
     formData.append("publisher", values.publisher);
+    formData.append("description", values.description);
     formData.append("publicationDate", values.publicationDate.toString());
     formData.append("pages", values.pages.toString());
     formData.append("price", values.price.toString());
     formData.append("stockQuantity", values.stockQuantity.toString());
-    formData.append("bookCover", values.bookCover[0]);
+    formData.append("bookCover", values.bookCover);
     // convert genres to form data array
-    values.gener.forEach((gen, index) => {
-      formData.append(`genre[${index}]`, gen);
+    values.genres.forEach((gen, index) => {
+      formData.append(`genres[${index}]`, gen);
     });
 
     const response = await apiClient.addBook(formData);
     const result = await response.json();
     if (!response.ok) {
-      console.log(result.message);
+      toast.error(result.message, {});
       return;
     }
 
-    console.log(result);
+    toast.success(result.message, {});
+    // Reset the form after publication success
+    reset();
   };
 
   return (
@@ -292,6 +297,29 @@ const AdminAddBook = () => {
                 {errors?.bookCover && (
                   <span className="text-sm text-red-500 font-semibold place-self-end">
                     {errors?.bookCover?.message}
+                  </span>
+                )}
+              </div>
+              {/* Publication Date  */}
+              <div className="min-h-[80px] w-full flex flex-col gap-1">
+                <label htmlFor="description">Book Description</label>
+                <textarea
+                  className="relative w-full px-3 py-1 border-2 border-light-400 rounded bg-transparent focus:border-secondary-100 outline-none"
+                  id="description"
+                  placeholder="A brief description about the Book..."
+                  {...register("description", {
+                    required: {
+                      value: true,
+                      message: "Book description is required",
+                    },
+                    validate: (value) => {
+                      return value.length >= 40 || "Book description must be at least 40 character";
+                    },
+                  })}
+                />
+                {errors?.description && (
+                  <span className="text-sm text-red-500 font-semibold place-self-end">
+                    {errors?.description?.message}
                   </span>
                 )}
               </div>

@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 import { v2 as cloudinary } from "cloudinary";
 import userRouter from "./routers/UserRouter";
 import adminRouter from "./routers/AdminRouter";
+import validateAuthRouter from "./routers/AuthValidation";
 
 const app = express();
 
@@ -35,6 +36,7 @@ app.use(
 );
 
 // app routers
+app.use("/api", validateAuthRouter);
 app.use("/api/user", userRouter);
 app.use("/api/admin", adminRouter);
 

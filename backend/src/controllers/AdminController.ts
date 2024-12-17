@@ -1,6 +1,6 @@
-import express, { Request, Response } from "express";
+import { Request, Response } from "express";
 import bcrypt from "bcrypt";
-import jwt, { JwtPayload } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import { validationResult } from "express-validator";
 import { AdminModel } from "../models/AdminModel";
 import { BookModel } from "../models/BookModel";
@@ -83,16 +83,26 @@ const adminLogin = async (req: Request, res: Response): Promise<Response | void>
   }
 };
 
-const adminBooks = async (req: Request, res: Response): Promise<Response | void> => {
+/**
+ * adminLogout - @async Function that logs the admin out
+ *
+ * @param req Express request for admin loging out
+ * @param res Express response
+ * @returns Express Response or void
+ */
+const adminLogout = async (req: Request, res: Response): Promise<Response | void> => {
   try {
-    const adminId = req.adminId;
-    const books = await BookModel.find({ adminId });
+    const token = jwt.sign({}, process.env.ADMIN_JWT_KEY as string, { expiresIn: "0d" });
 
-    if (!books) return res.status(404).json({ message: "No books found!" });
+    res.cookie("admin_auth_token", token, {
+      expires: new Date("01/01/1990"),
+      httpOnly: true,
+      secure: process.env.ENV_MODE === "production",
+    });
 
-    return res.status(200).json(books);
+    return res.status(200).json({ message: "Logged Out Success" });
   } catch (error) {
-    return res.status(500).json({ message: "Something went wrong!" });
+    return res.status(500).json({ message: "Unknown error occured during the logout process!" });
   }
 };
 
@@ -110,6 +120,13 @@ const uploadImage = async (imageFile: Express.Multer.File) => {
   return res.url;
 };
 
+/**
+ * addBook - @async Function that adds books to the database
+ *
+ * @param req Express request to publish a book
+ * @param res Express response that contains the book if published or an error message
+ * @returns Express Response that contains that publication result
+ */
 const addBook = async (req: Request, res: Response): Promise<Response | void> => {
   // check if there some errors
   const errors = validationResult(req).array();
@@ -131,4 +148,41 @@ const addBook = async (req: Request, res: Response): Promise<Response | void> =>
   }
 };
 
-export { adminRegister, adminLogin, adminBooks, addBook };
+/**
+ * Retrieves all books associated with a specific admin
+ *
+ * @route GET /api/admin/books (assumed endpoint)
+ * @param {Request} req - Express request object containing adminId in request properties
+ * @param {Response} res - Express response object
+ * @returns {Promise<Response | void>} JSON response with books array or error message
+ *
+ * @throws {404} If no books are found for the admin
+ * @throws {500} If server encounters an error
+ *
+ * @example
+ * // Success Response
+ * {
+ *   [...bookObjects]
+ * }
+ *
+ * // Error Response
+ * {
+ *   "message": "No books found!"
+ * }
+ *
+ * @requires Authentication - Assumes adminId is set in request object through middleware
+ */
+const adminBooks = async (req: Request, res: Response): Promise<Response | void> => {
+  try {
+    const adminId = req.adminId;
+    const books = await BookModel.find({ adminId });
+
+    if (!books) return res.status(404).json({ message: "No books found!" });
+
+    return res.status(200).json(books);
+  } catch (error) {
+    return res.status(500).json({ message: "Something went wrong!" });
+  }
+};
+
+export { adminRegister, adminLogin, adminBooks, addBook, adminLogout };

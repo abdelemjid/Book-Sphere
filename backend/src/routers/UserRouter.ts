@@ -1,7 +1,6 @@
 import express from "express";
 import * as userController from "../controllers/UserController";
 import { body } from "express-validator";
-import verifyUserToken from "../middleware/UserAuth";
 
 const router = express.Router();
 
@@ -31,5 +30,9 @@ router.post(
   ],
   userController.userLogin as express.RequestHandler
 );
+
+router.get("/logout", userController.userLogout as express.RequestHandler);
+
+router.get("/books", userController.userBooks as express.RequestHandler);
 
 export default router;

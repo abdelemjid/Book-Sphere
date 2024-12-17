@@ -8,11 +8,11 @@ const HeroSlide = ({ image, phrase, index }: Slide) => {
       initial={{ x: -3000, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
       exit={{ x: 3000, opacity: 0 }}
-      transition={{ duration: 0.3 }}
-      className="relative flex flex-col md:flex-row gap-3 items-center justify-center"
+      transition={{ duration: 0.8 }}
+      className="relative flex flex-col md:flex-row gap-3 items-center justify-center min-h-[120px] sm:min-h-[300px]"
     >
       <img className="hidden-sm max-h-[200px]" src={image} alt="Slide Image" />
-      <p className="min-h-[50px] flex-1 text-third-100 dark:text-light-100 text-lg sm:text-2xl xl:text-3xl font-semibold ">
+      <p className="sm:flex-1 text-light-100 text-2xl sm:text-2xl xl:text-3xl text-center font-semibold ">
         {phrase}
       </p>
     </motion.div>
