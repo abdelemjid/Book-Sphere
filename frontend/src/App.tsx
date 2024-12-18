@@ -9,6 +9,7 @@ import AdminLoginPage from "./pages/admin/AdminLogin";
 import AdminRegisterPage from "./pages/admin/AdminRegister";
 import AdminHome from "./pages/admin/AdminHome";
 import AdminAddBook from "./pages/admin/AdminAddBook";
+import EditBook from "./pages/admin/EditBook";
 
 function App() {
   return (
@@ -100,6 +101,15 @@ function App() {
         element={
           <Layout>
             <AdminAddBook />
+          </Layout>
+        }
+      />
+      {/* Edit Book Page */}
+      <Route
+        path="/admin/book/:id"
+        element={
+          <Layout>
+            <EditBook />
           </Layout>
         }
       />

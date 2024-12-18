@@ -46,7 +46,7 @@ const RegisterPage = () => {
             {/* Username Input */}
             <div className="w-full flex flex-col gap-1">
               <input
-                className="w-full py-1 px-3 rounded-md border-2 placeholder:text-secondary-400 border-transparent focus:border-secondary-100 outline-none bg-light-300 dark:bg-light-400/20 focus:bg-light-200/20"
+                className="w-full py-1 px-3 rounded-md border-2 placeholder:text-dark-400 dark:placeholder:text-primary-400 border-transparent focus:border-secondary-100 outline-none bg-light-300 dark:bg-light-400/20 focus:bg-light-200/20"
                 type="text"
                 id="username"
                 placeholder="Username"
@@ -60,14 +60,14 @@ const RegisterPage = () => {
                   },
                 })}
               />
-              <span className="place-self-end text-xs font-semibold text-red-500">
+              <span className="place-self-end text-sm font-semibold text-red-500">
                 {errors?.username?.message}
               </span>
             </div>
             {/* Email Input */}
             <div className="w-full flex flex-col gap-1">
               <input
-                className="w-full py-1 px-3 rounded-md border-2 placeholder:text-secondary-400 border-transparent focus:border-secondary-100 outline-none bg-light-300 dark:bg-light-400/20 focus:bg-light-200/20"
+                className="w-full py-1 px-3 rounded-md border-2 placeholder:text-dark-400 dark:placeholder:text-primary-400 border-transparent focus:border-secondary-100 outline-none bg-light-300 dark:bg-light-400/20 focus:bg-light-200/20"
                 type="email"
                 id="email"
                 placeholder="Email"
@@ -82,14 +82,14 @@ const RegisterPage = () => {
                   },
                 })}
               />
-              <span className="place-self-end text-xs font-semibold text-red-500">
+              <span className="place-self-end text-sm font-semibold text-red-500">
                 {errors?.email?.message}
               </span>
             </div>
             {/* Password Input */}
             <div className="w-full flex flex-col gap-1">
               <input
-                className="w-full py-1 px-3 rounded-md border-2 placeholder:text-secondary-400 border-transparent focus:border-secondary-100 outline-none bg-light-300 dark:bg-light-400/20 focus:bg-light-200/20"
+                className="w-full py-1 px-3 rounded-md border-2 placeholder:text-dark-400 dark:placeholder:text-primary-400 border-transparent focus:border-secondary-100 outline-none bg-light-300 dark:bg-light-400/20 focus:bg-light-200/20"
                 type="password"
                 id="password"
                 placeholder="Password"
@@ -103,16 +103,16 @@ const RegisterPage = () => {
                   },
                 })}
               />
-              <span className="place-self-end text-xs font-semibold text-red-500">
+              <span className="place-self-end text-sm font-semibold text-red-500">
                 {errors?.password?.message}
               </span>
             </div>
-            {/* Login Button */}
-            <button className="w-full py-1 rounded-md bg-third-100" type="submit">
-              Login
+            {/* Register Button */}
+            <button className="w-full py-1 rounded-md bg-third-100 text-black" type="submit">
+              Sign Up
             </button>
           </form>
-          {/* Registeration Link */}
+          {/* Login Link */}
           <p className="text-sm mt-5">
             You already have an account?{" "}
             <Link to="/login" className="text-third-100">

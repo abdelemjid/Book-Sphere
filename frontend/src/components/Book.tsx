@@ -2,11 +2,12 @@ import { BookType } from "../types/Types";
 
 interface Props {
   book: BookType;
+  onClick: (bookId: string | undefined) => void;
 }
 
-const Book = ({ book }: Props) => {
+const Book = ({ book, onClick }: Props) => {
   return (
-    <div id={book._id} key={book._id} className="mx-auto">
+    <div onClick={() => onClick(book._id)} id={book._id} key={book._id} className="mx-auto">
       <div className="h-[320px] w-[222px] flex flex-col gap-2 justify-center items-center border dark:border-light-100/20 border-dark-400/20 dark:hover:bg-light-100/10 hover:bg-dark-400/10 duration-200">
         <img className="w-fit h-[200px]" src={book.bookCover} alt="Book Cover" />
         <h1 className="text-sm text-center">{book.title}</h1>

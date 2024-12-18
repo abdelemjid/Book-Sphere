@@ -63,45 +63,94 @@ const Navbar = () => {
           </button>
         )}
         {/* Desktop Nav  */}
-        <nav className="hidden-sm flex-md flex-row justify-center items-center gap-3">
-          <Link
-            to="/"
-            className="px-2 py-1 duration-200 hover:bg-primary-300/30 dark:hover:bg-third-100 rounded-md"
-          >
-            Home
-          </Link>
-          <Link
-            to="/my-books"
-            className="px-2 py-1 duration-200 hover:bg-primary-300/30 dark:hover:bg-third-100 rounded-md"
-          >
-            My Books
-          </Link>
-          <Link
-            to="/favorite"
-            className="px-2 py-1 duration-200 hover:bg-primary-300/30 dark:hover:bg-third-100 rounded-md"
-          >
-            Favorite
-          </Link>
-          {isAuthenticated ? (
+        {isAdmin ? (
+          <nav className="hidden-sm flex-md flex-row justify-center items-center gap-3">
             <Link
-              to={`${isAdmin ? "/admin" : "/"}`}
-              onClick={async () => {
-                if (isAdmin) await adminLogout();
-                else await userLogout();
-              }}
+              to="/admin"
               className="px-2 py-1 duration-200 hover:bg-primary-300/30 dark:hover:bg-third-100 rounded-md"
             >
-              Logout
+              Home
             </Link>
-          ) : (
             <Link
-              to="/login"
+              to="/admin/add"
               className="px-2 py-1 duration-200 hover:bg-primary-300/30 dark:hover:bg-third-100 rounded-md"
             >
-              Login
+              New Book
             </Link>
-          )}
-        </nav>
+            <Link
+              to="/admin/dashboard"
+              className="px-2 py-1 duration-200 hover:bg-primary-300/30 dark:hover:bg-third-100 rounded-md"
+            >
+              Dashboard
+            </Link>
+            {isAuthenticated ? (
+              <button
+                onClick={async () => {
+                  await adminLogout();
+                }}
+                className="px-2 py-1 duration-200 hover:bg-primary-300/30 dark:hover:bg-third-100 rounded-md"
+              >
+                Logout
+              </button>
+            ) : (
+              <Link
+                to="/admin/login"
+                className="px-2 py-1 duration-200 hover:bg-primary-300/30 dark:hover:bg-third-100 rounded-md"
+              >
+                Login
+              </Link>
+            )}
+          </nav>
+        ) : (
+          <nav className="hidden-sm flex-md flex-row justify-center items-center gap-3">
+            <Link
+              to="/"
+              className="px-2 py-1 duration-200 hover:bg-primary-300/30 dark:hover:bg-third-100 rounded-md"
+            >
+              Home
+            </Link>
+            <Link
+              to="/my-books"
+              className="px-2 py-1 duration-200 hover:bg-primary-300/30 dark:hover:bg-third-100 rounded-md"
+            >
+              My Books
+            </Link>
+            <Link
+              to="/favorite"
+              className="px-2 py-1 duration-200 hover:bg-primary-300/30 dark:hover:bg-third-100 rounded-md"
+            >
+              Favorite
+            </Link>
+
+            {isAuthenticated ? (
+              <Link
+                to={`${isAdmin ? "/admin" : "/"}`}
+                onClick={async () => {
+                  if (isAdmin) await adminLogout();
+                  else await userLogout();
+                }}
+                className="px-2 py-1 duration-200 hover:bg-primary-300/30 dark:hover:bg-third-100 rounded-md"
+              >
+                Logout
+              </Link>
+            ) : (
+              <>
+                <Link
+                  to="/admin"
+                  className="px-2 py-1 duration-200 hover:bg-primary-300/30 dark:hover:bg-third-100 rounded-md"
+                >
+                  Seller
+                </Link>
+                <Link
+                  to="/login"
+                  className="px-2 py-1 duration-200 hover:bg-primary-300/30 dark:hover:bg-third-100 rounded-md"
+                >
+                  Login
+                </Link>
+              </>
+            )}
+          </nav>
+        )}
       </div>
     </div>
   );

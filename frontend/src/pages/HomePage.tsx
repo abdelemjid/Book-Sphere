@@ -5,6 +5,7 @@ import * as apiClient from "../apiClient";
 import { BookType } from "../types/Types";
 import { toast } from "react-toastify";
 import Book from "../components/Book";
+import RecentBooks from "../components/sections/RecentBooks";
 
 const HomePage = () => {
   const [books, setBooks] = useState<BookType[] | undefined>(undefined);
@@ -62,6 +63,8 @@ const HomePage = () => {
 
   return (
     <div className="container my-10">
+      <h1 className="text-lg font-semibold mb-5">Recent Published</h1>
+      <RecentBooks books={books?.slice(0, 2)} />
       <h1 className="text-lg font-semibold mb-5">Books</h1>
       <div className="grid grid-cols-[repeat(auto-fill,222px)] gap-2 items-center">
         {books?.map((book) => (

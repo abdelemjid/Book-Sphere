@@ -48,27 +48,53 @@ const MobileNav = () => {
       </button>
       {/* Nav Links */}
       <nav className="container w-full h-full flex flex-col justify-center items-center gap-1">
-        <Link
-          onClick={() => close()}
-          to="/"
-          className="w-full text-center border border-secondary-100 px-2 py-1 duration-200 hover:bg-primary-300/30 dark:hover:bg-third-100 rounded-md"
-        >
-          Home
-        </Link>
-        <Link
-          onClick={() => close()}
-          to="/my-books"
-          className="w-full text-center border border-secondary-100 px-2 py-1 duration-200 hover:bg-primary-300/30 dark:hover:bg-third-100 rounded-md"
-        >
-          My Books
-        </Link>
-        <Link
-          onClick={() => close()}
-          to="/favorite"
-          className="w-full text-center border border-secondary-100 px-2 py-1 duration-200 hover:bg-primary-300/30 dark:hover:bg-third-100 rounded-md"
-        >
-          Favorite
-        </Link>
+        {isAuthenticated && isAdmin ? (
+          <>
+            <Link
+              to="/admin"
+              className="w-full text-center border border-secondary-100 bg-third-100 px-2 py-1 duration-200 hover:border-dark-100 dark:hover:border-light-100 rounded-sm"
+            >
+              Home
+            </Link>
+            <Link
+              to="/admin/add"
+              className="w-full text-center border border-secondary-100 bg-third-100 px-2 py-1 duration-200 hover:border-dark-100 dark:hover:border-light-100 rounded-sm"
+            >
+              New Book
+            </Link>
+            <Link
+              to="/admin/dashboard"
+              className="w-full text-center border border-secondary-100 bg-third-100 px-2 py-1 duration-200 hover:border-dark-100 dark:hover:border-light-100 rounded-sm"
+            >
+              Dashboard
+            </Link>
+          </>
+        ) : (
+          <>
+            <Link
+              onClick={() => close()}
+              to="/"
+              className="w-full text-center border border-secondary-100 bg-third-100 px-2 py-1 duration-200 hover:border-dark-100 dark:hover:border-light-100 rounded-sm"
+            >
+              Home
+            </Link>
+            <Link
+              onClick={() => close()}
+              to="/my-books"
+              className="w-full text-center border border-secondary-100 bg-third-100 px-2 py-1 duration-200 hover:border-dark-100 dark:hover:border-light-100 rounded-sm"
+            >
+              My Books
+            </Link>
+            <Link
+              onClick={() => close()}
+              to="/favorite"
+              className="w-full text-center border border-secondary-100 bg-third-100 px-2 py-1 duration-200 hover:border-dark-100 dark:hover:border-light-100 rounded-sm"
+            >
+              Favorite
+            </Link>
+          </>
+        )}
+
         {isAuthenticated ? (
           <Link
             onClick={async () => {
@@ -78,7 +104,7 @@ const MobileNav = () => {
               close();
             }}
             to="/login"
-            className="w-full text-center border border-secondary-100 px-2 py-1 duration-200 hover:bg-primary-300/30 dark:hover:bg-third-100 rounded-md"
+            className="w-full text-center border border-secondary-100 bg-third-100 px-2 py-1 duration-200 hover:border-dark-100 dark:hover:border-light-100 rounded-sm"
           >
             Logout
           </Link>
@@ -86,7 +112,7 @@ const MobileNav = () => {
           <Link
             onClick={() => close()}
             to="/login"
-            className="w-full text-center border border-secondary-100 px-2 py-1 duration-200 hover:bg-primary-300/30 dark:hover:bg-third-100 rounded-md"
+            className="w-full text-center border border-secondary-100 bg-third-100 px-2 py-1 duration-200 hover:border-dark-100 dark:hover:border-light-100 rounded-sm"
           >
             Login
           </Link>

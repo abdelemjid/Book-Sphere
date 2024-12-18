@@ -42,7 +42,7 @@ const LoginPage = () => {
             {/* Email Input */}
             <div className="w-full flex flex-col gap-1">
               <input
-                className="w-full py-1 px-3 rounded-md border-2 placeholder:text-secondary-400 border-transparent focus:border-secondary-100 outline-none bg-light-300 dark:bg-light-400/20 focus:bg-light-200/20"
+                className="w-full py-1 px-3 rounded-md border-2 placeholder:text-dark-400 dark:placeholder:text-primary-400 border-transparent focus:border-secondary-100 outline-none bg-light-300 dark:bg-light-400/20 focus:bg-light-200/20"
                 type="email"
                 id="email"
                 placeholder="Email"
@@ -57,14 +57,14 @@ const LoginPage = () => {
                   },
                 })}
               />
-              <span className="place-self-end text-xs font-semibold text-red-500">
+              <span className="place-self-end text-sm font-semibold text-red-500">
                 {errors?.email?.message}
               </span>
             </div>
             {/* Password Input */}
             <div className="w-full flex flex-col gap-1">
               <input
-                className="w-full py-1 px-3 rounded-md border-2 placeholder:text-secondary-400 border-transparent focus:border-secondary-100 outline-none bg-light-300 dark:bg-light-400/20 focus:bg-light-200/20"
+                className="w-full py-1 px-3 rounded-md border-2 placeholder:text-dark-400 dark:placeholder:text-primary-400 border-transparent focus:border-secondary-100 outline-none bg-light-300 dark:bg-light-400/20 focus:bg-light-200/20"
                 type="password"
                 id="password"
                 placeholder="Password"
@@ -78,12 +78,12 @@ const LoginPage = () => {
                   },
                 })}
               />
-              <span className="place-self-end text-xs font-semibold text-red-500">
+              <span className="place-self-end text-sm font-semibold text-red-500">
                 {errors?.password?.message}
               </span>
             </div>
             {/* Login Button */}
-            <button className="w-full py-1 rounded-md bg-third-100" type="submit">
+            <button className="w-full py-1 rounded-md bg-third-100 text-black" type="submit">
               Login
             </button>
           </form>

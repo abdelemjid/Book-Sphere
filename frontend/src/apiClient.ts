@@ -35,6 +35,13 @@ export const fetchBooks = async () => {
   });
 };
 
+export const userLogout = async () => {
+  return fetch(`${backendUrl}/api/user/logout`, {
+    method: "get",
+    credentials: "include",
+  });
+};
+
 //----------------------- ADMIN -----------------------
 
 export const loginAdmin = async (values: LoginFormValues): Promise<Response> => {
@@ -81,15 +88,15 @@ export const validateAuth = async () => {
   });
 };
 
-export const adminLogout = async () => {
-  return fetch(`${backendUrl}/api/admin/logout`, {
+export const validateAdminToken = async () => {
+  return fetch(`${backendUrl}/api/admin/validate-token`, {
     method: "get",
     credentials: "include",
   });
 };
 
-export const userLogout = async () => {
-  return fetch(`${backendUrl}/api/user/logout`, {
+export const adminLogout = async () => {
+  return fetch(`${backendUrl}/api/admin/logout`, {
     method: "get",
     credentials: "include",
   });
