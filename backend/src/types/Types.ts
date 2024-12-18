@@ -12,6 +12,7 @@ export interface BookType {
   isbn: string;
   publisher: string;
   publicationDate: Date;
+  description: string;
   genres: string[];
   language: string;
   price: number;

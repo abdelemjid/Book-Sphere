@@ -13,6 +13,8 @@ const upload = multer({
   },
 });
 
+router.get("/validate-token", controller.validateToken as express.RequestHandler);
+
 router.post(
   "/register",
   [

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import { validationResult } from "express-validator";
 import { AdminModel } from "../models/AdminModel";
 import { BookModel } from "../models/BookModel";
@@ -185,4 +185,26 @@ const adminBooks = async (req: Request, res: Response): Promise<Response | void>
   }
 };
 
-export { adminRegister, adminLogin, adminBooks, addBook, adminLogout };
+/**
+ * validateToken - @async Function that validates the admin token
+ *
+ * @param req Express Request
+ * @param res Express Response
+ * @returns Express response
+ */
+const validateToken = async (req: Request, res: Response): Promise<Response | void> => {
+  try {
+    const token = req.cookies["admin_auth_token"];
+    if (!token) return res.status(401).json({ message: "Invalid token!" });
+
+    const decoded = jwt.verify(token, process.env.ADMIN_JWT_KEY as string);
+    const adminId = (decoded as JwtPayload).adminId;
+    if (!adminId) return res.status(401).json({ message: "Invalid token!" });
+
+    return res.status(200).json({ message: "Valid Token" });
+  } catch (error) {
+    return res.status(401).json({ message: "Invalid token!" });
+  }
+};
+
+export { adminRegister, adminLogin, adminBooks, addBook, adminLogout, validateToken };
