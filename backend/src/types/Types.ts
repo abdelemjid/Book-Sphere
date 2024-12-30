@@ -17,7 +17,8 @@ export interface BookType {
   language: string;
   price: number;
   stockQuantity: number;
-  bookCover: string;
+  bookCover?: File;
+  bookImageUrl?: string;
 }
 
 export interface AdminType extends UserType {

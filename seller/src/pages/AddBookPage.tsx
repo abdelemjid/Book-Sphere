@@ -1,10 +1,11 @@
 import { FormProvider, useForm } from "react-hook-form";
-import { BookType } from "../../types/Types";
-import BookGenre from "../../components/admin/BookGenre";
-import * as apiClient from "../../apiClient";
-import { toast } from "react-toastify";
+import { BookType } from "../types/Types";
+import BookGenre from "../components/BookGenre";
+import { useAddBook } from "../api/BookApi";
 
-const AdminAddBook = () => {
+const AddBookPage = () => {
+  const { error, isError, isLoading, publishNewBook } = useAddBook();
+
   const form = useForm<BookType>({
     mode: "onChange",
   });
@@ -28,22 +29,20 @@ const AdminAddBook = () => {
     formData.append("pages", values.pages.toString());
     formData.append("price", values.price.toString());
     formData.append("stockQuantity", values.stockQuantity.toString());
-    formData.append("bookCover", values.bookCover);
+    formData.append("bookCover", values.bookCover[0] as File);
+
     // convert genres to form data array
     values.genres.forEach((gen, index) => {
       formData.append(`genres[${index}]`, gen);
     });
 
-    const response = await apiClient.addBook(formData);
-    const result = await response.json();
-    if (!response.ok) {
-      toast.error(result.message, {});
-      return;
+    await publishNewBook(formData);
+
+    if (!isError) {
+      reset();
     }
 
-    toast.success(result.message, {});
-    // Reset the form after publication success
-    reset();
+    if (isError) console.log(error);
   };
 
   return (
@@ -326,8 +325,12 @@ const AdminAddBook = () => {
               {/* Book Genre */}
               <BookGenre />
               {/* Submit Button */}
-              <button className="px-3 py-1 mt-5 bg-third-100 rounded-md" type="submit">
-                Submit The Book
+              <button
+                disabled={isLoading}
+                className="px-3 py-1 mt-5 bg-third-100 rounded-md"
+                type="submit"
+              >
+                {isLoading ? "Publishing..." : "Submit The Book"}
               </button>
             </div>
           </form>
@@ -337,4 +340,4 @@ const AdminAddBook = () => {
   );
 };
 
-export default AdminAddBook;
+export default AddBookPage;

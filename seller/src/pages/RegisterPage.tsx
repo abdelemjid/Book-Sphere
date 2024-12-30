@@ -1,13 +1,13 @@
 import { useForm, Controller } from "react-hook-form";
-import { AdminRegisterFormValues } from "../../types/Types";
-import * as apiClient from "../../apiClient";
-import { useAuth } from "../../contexts/AuthProvider";
+import { AdminRegisterFormValues } from "../../../frontend/src/types/Types";
+import * as apiClient from "../../../frontend/src/apiClient";
+import { useAuth } from "../../../frontend/src/contexts/AuthProvider";
 import { Link } from "react-router";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import "./phone-number.css";
 
-const AdminRegisterPage = () => {
+const RegisterPage = () => {
   const { login } = useAuth();
 
   const form = useForm<AdminRegisterFormValues>({
@@ -158,4 +158,4 @@ const AdminRegisterPage = () => {
   );
 };
 
-export default AdminRegisterPage;
+export default RegisterPage;

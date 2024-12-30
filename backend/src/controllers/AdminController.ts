@@ -4,7 +4,7 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import { validationResult } from "express-validator";
 import { AdminModel } from "../models/AdminModel";
 import { BookModel } from "../models/BookModel";
-import { v2 as cloudinary } from "cloudinary";
+import { uploadImage } from "../utils/Uploader";
 
 /**
  * adminRegister - @async Function that register admins and generates admin token
@@ -107,20 +107,6 @@ const adminLogout = async (req: Request, res: Response): Promise<Response | void
 };
 
 /**
- * uploadImage - @async Function that uploads the Book Cover Image to the cloudinary
- *
- * @param imageFiles Array of Image URIs
- * @returns Array of image URLs
- */
-const uploadImage = async (imageFile: Express.Multer.File) => {
-  const b64 = Buffer.from(imageFile.buffer).toString("base64");
-  let uri = "data:" + imageFile.mimetype + ";base64," + b64;
-  const res = await cloudinary.uploader.upload(uri);
-
-  return res.url;
-};
-
-/**
  * addBook - @async Function that adds books to the database
  *
  * @param req Express request to publish a book
@@ -128,6 +114,11 @@ const uploadImage = async (imageFile: Express.Multer.File) => {
  * @returns Express Response that contains that publication result
  */
 const addBook = async (req: Request, res: Response): Promise<Response | void> => {
+  // First check if file exists
+  if (!req.file) {
+    return res.status(400).json({ message: "Book cover image is required" });
+  }
+
   // check if there some errors
   const errors = validationResult(req).array();
   if (errors?.length) return res.status(400).json({ message: errors[0].msg });
@@ -137,7 +128,7 @@ const addBook = async (req: Request, res: Response): Promise<Response | void> =>
     const imageUrl = await uploadImage(imageFile);
 
     const book = new BookModel(req.body);
-    book.bookCover = imageUrl;
+    book.bookImageUrl = imageUrl;
     book.adminId = req.adminId;
     await book.save();
 

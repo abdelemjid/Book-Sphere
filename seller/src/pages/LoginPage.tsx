@@ -1,11 +1,22 @@
 import { useForm } from "react-hook-form";
-import { LoginFormValues } from "../../types/Types";
-import { Link } from "react-router";
-import * as apiClient from "../../apiClient";
-import { useAuth } from "../../contexts/AuthProvider";
+import { LoginFormValues } from "../types/Types";
+import { Link, useNavigate } from "react-router";
+import { useLogin } from "../api/AdminAuth";
+import { useAuth } from "../contexts/AuthProvider";
+import { useTokenVerification } from "../api/VerifyToken";
 
-const AdminLoginPage = () => {
+const LoginPage = () => {
+  const { isLoading, isSuccess, isError: isLoginError, LogIn } = useLogin();
   const { login } = useAuth();
+  const navigate = useNavigate();
+
+  const { isSuccess: isVerified, isLoading: verification } = useTokenVerification();
+
+  if (isVerified) {
+    login();
+    navigate("/");
+  }
+
   const form = useForm<LoginFormValues>({
     defaultValues: {
       email: "",
@@ -18,18 +29,27 @@ const AdminLoginPage = () => {
     register,
     formState: { errors },
     handleSubmit,
+    setValue,
   } = form;
 
+  if (verification) {
+    return <h1 className="text-center">Verifying Authentication...</h1>;
+  }
+
   const onSubmit = async (values: LoginFormValues) => {
-    const response = await apiClient.loginAdmin(values);
-    const result = await response.json();
-    if (!response.ok) {
-      console.log(result.message);
-      return;
+    LogIn(values);
+
+    if (isLoading) {
+      return <h1 className="text-center">Loading...</h1>;
     }
 
-    console.log(result.message);
-    login(true);
+    if (isSuccess) {
+      navigate("/");
+    }
+
+    if (isLoginError) {
+      setValue("password", "");
+    }
   };
 
   return (
@@ -99,4 +119,4 @@ const AdminLoginPage = () => {
   );
 };
 
-export default AdminLoginPage;
+export default LoginPage;

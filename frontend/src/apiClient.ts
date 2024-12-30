@@ -44,17 +44,6 @@ export const userLogout = async () => {
 
 //----------------------- ADMIN -----------------------
 
-export const loginAdmin = async (values: LoginFormValues): Promise<Response> => {
-  return fetch(`${backendUrl}/api/admin/login`, {
-    method: "post",
-    credentials: "include",
-    headers: {
-      "content-type": "application/json",
-    },
-    body: JSON.stringify(values),
-  });
-};
-
 export const registerAdmin = async (values: AdminRegisterFormValues): Promise<Response> => {
   return fetch(`${backendUrl}/api/admin/register`, {
     method: "post",
@@ -90,13 +79,6 @@ export const validateAuth = async () => {
 
 export const validateAdminToken = async () => {
   return fetch(`${backendUrl}/api/admin/validate-token`, {
-    method: "get",
-    credentials: "include",
-  });
-};
-
-export const adminLogout = async () => {
-  return fetch(`${backendUrl}/api/admin/logout`, {
     method: "get",
     credentials: "include",
   });

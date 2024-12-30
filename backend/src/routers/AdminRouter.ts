@@ -1,6 +1,7 @@
 import express from "express";
-import * as controller from "../controllers/AdminController";
-import { body } from "express-validator";
+import * as adminController from "../controllers/AdminController";
+import * as bookController from "../controllers/BooksController";
+import { body, check, param } from "express-validator";
 import multer from "multer";
 import verifyAdminToken from "../middleware/AdminAuth";
 
@@ -13,7 +14,7 @@ const upload = multer({
   },
 });
 
-router.get("/validate-token", controller.validateToken as express.RequestHandler);
+router.get("/validate-token", adminController.validateToken as express.RequestHandler);
 
 router.post(
   "/register",
@@ -30,7 +31,7 @@ router.post(
       .withMessage("Mobile phone number invalid!"),
     body("password").isLength({ min: 8 }).withMessage("Password invalid!"),
   ],
-  controller.adminRegister as express.RequestHandler
+  adminController.adminRegister as express.RequestHandler
 );
 
 router.post(
@@ -41,21 +42,21 @@ router.post(
       .isLength({ min: 8 })
       .withMessage("Invalide Password! should contains 8 characters or more"),
   ],
-  controller.adminLogin as express.RequestHandler
+  adminController.adminLogin as express.RequestHandler
 );
 
-router.get("/logout", controller.adminLogout as express.RequestHandler);
+router.get("/logout", adminController.adminLogout as express.RequestHandler);
 
 router.get(
   "/books",
   verifyAdminToken as express.RequestHandler,
-  controller.adminBooks as express.RequestHandler
+  adminController.adminBooks as express.RequestHandler
 );
 
 router.post(
   "/add-book",
-  verifyAdminToken as express.RequestHandler,
   upload.single("bookCover"),
+  verifyAdminToken as express.RequestHandler,
   [
     body("title").notEmpty().withMessage("Book Title is required"),
     body("author").notEmpty().withMessage("Author Name is required"),
@@ -78,10 +79,60 @@ router.post(
     body("price").isNumeric().notEmpty().withMessage("Book Price count is required"),
     body("stockQuantity").isNumeric().notEmpty().withMessage("Stock Quantity is required"),
   ],
-  controller.addBook as express.RequestHandler
+  adminController.addBook as express.RequestHandler
 );
 
-router.post("/book/:bookId");
-router.get("/book/:bookId");
+router.get(
+  "/book/:bookId",
+  verifyAdminToken as express.RequestHandler,
+  [param("bookId").notEmpty().isHexadecimal().isLength({ min: 24 }).withMessage("Invalid book ID")],
+  bookController.getBook as express.RequestHandler
+);
+
+router.post(
+  "/book",
+  upload.single("bookCover"),
+  verifyAdminToken as express.RequestHandler,
+  [
+    body("title").notEmpty().withMessage("Book Title is required"),
+    body("author").notEmpty().withMessage("Author Name is required"),
+    body("publisher").notEmpty().withMessage("Publisher Name is required"),
+    body("language").notEmpty().withMessage("Book Language is required"),
+    body("genres")
+      .isArray()
+      .withMessage("Genres must be an array")
+      .isLength({ min: 1 })
+      .withMessage("A book must have at least one genre")
+      .withMessage("Book Genre is required"),
+    check("publicationDate")
+      .exists()
+      .withMessage("Publication Date is required")
+      .isISO8601()
+      .withMessage("Invalid date format"),
+    body("pages").isNumeric().notEmpty().withMessage("Book Page Count is required"),
+    body("isbn")
+      .isNumeric()
+      .isLength({ min: 10 })
+      .withMessage("Book ISBN not valid")
+      .notEmpty()
+      .withMessage("Book ISBN is required"),
+    body("price").isNumeric().notEmpty().withMessage("Book Price count is required"),
+    body("stockQuantity").isNumeric().notEmpty().withMessage("Stock Quantity is required"),
+  ],
+  bookController.updateBook as express.RequestHandler
+);
+
+router.delete(
+  "/book",
+  verifyAdminToken as express.RequestHandler,
+  [
+    body("bookId")
+      .notEmpty()
+      .withMessage("Book ID is required to delete it!")
+      .isString()
+      .withMessage("Invalid Book ID"),
+  ],
+  bookController.deleteBook as express.RequestHandler
+);
 
 export default router;

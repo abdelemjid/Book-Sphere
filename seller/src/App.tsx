@@ -1,42 +1,24 @@
 import { Route, Routes } from "react-router";
+import Layout from "./layout/Layout";
 import HomePage from "./pages/HomePage";
-import Layout from "./layouts/Layout";
 import LoginPage from "./pages/LoginPage";
-import MyBooksPage from "./pages/MyBooksPage";
-import FavoritePage from "./pages/FavoritePage";
 import RegisterPage from "./pages/RegisterPage";
+import AddBookPage from "./pages/AddBookPage";
+import EditBookPage from "./pages/EditBookPage";
 
 function App() {
   return (
     <Routes>
-      {/* Homa Page  */}
+      {/* Admin Home Page */}
       <Route
         path="/"
         element={
-          <Layout showHero={true}>
+          <Layout>
             <HomePage />
           </Layout>
         }
       />
-      {/* My Books Pages */}
-      <Route
-        path="/my-books"
-        element={
-          <Layout>
-            <MyBooksPage />
-          </Layout>
-        }
-      />
-      {/* Favorite Page */}
-      <Route
-        path="/favorite"
-        element={
-          <Layout>
-            <FavoritePage />
-          </Layout>
-        }
-      />
-      {/* Login Page */}
+      {/* Admin Login Page */}
       <Route
         path="/login"
         element={
@@ -45,21 +27,31 @@ function App() {
           </Layout>
         }
       />
-      {/* Login Page */}
-      <Route
-        path="/login"
-        element={
-          <Layout>
-            <LoginPage />
-          </Layout>
-        }
-      />
-      {/* Register Page */}
+      {/* Admin Register Page */}
       <Route
         path="/register"
         element={
           <Layout>
             <RegisterPage />
+          </Layout>
+        }
+      />
+
+      {/* Admin Add Books Page */}
+      <Route
+        path="/add"
+        element={
+          <Layout>
+            <AddBookPage />
+          </Layout>
+        }
+      />
+      {/* Edit Book Page */}
+      <Route
+        path="/book/:id"
+        element={
+          <Layout>
+            <EditBookPage />
           </Layout>
         }
       />
