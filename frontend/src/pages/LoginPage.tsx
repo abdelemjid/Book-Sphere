@@ -1,11 +1,13 @@
 import { useForm } from "react-hook-form";
-import { Link } from "react-router";
+import { Link, Navigate } from "react-router";
 import * as apiClient from "../apiClient";
 import { useAuth } from "../contexts/AuthProvider";
 import { LoginFormValues } from "../types/Types";
+import { useTokenChcker } from "../api/TokenChecker";
 
 const LoginPage = () => {
   const { login } = useAuth();
+  const { error, isError, isSuccess } = useTokenChcker();
 
   const form = useForm<LoginFormValues>({
     defaultValues: {
@@ -21,6 +23,11 @@ const LoginPage = () => {
     handleSubmit,
   } = form;
 
+  if (!isError && !error && isSuccess) {
+    login();
+    return <Navigate to="/" />;
+  }
+
   const onSubmit = async (values: LoginFormValues) => {
     const response = await apiClient.loginUser(values);
     const result = await response.json();
@@ -30,7 +37,7 @@ const LoginPage = () => {
       return;
     }
 
-    login(false);
+    login();
   };
 
   return (

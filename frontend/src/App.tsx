@@ -5,65 +5,68 @@ import LoginPage from "./pages/LoginPage";
 import MyBooksPage from "./pages/MyBooksPage";
 import FavoritePage from "./pages/FavoritePage";
 import RegisterPage from "./pages/RegisterPage";
+import { QueryClient, QueryClientProvider } from "react-query";
+import ProtectedRoute from "./routes/ProtectedRoute";
 
 function App() {
+  const queryClient = new QueryClient();
+
   return (
-    <Routes>
-      {/* Homa Page  */}
-      <Route
-        path="/"
-        element={
-          <Layout showHero={true}>
-            <HomePage />
-          </Layout>
-        }
-      />
-      {/* My Books Pages */}
-      <Route
-        path="/my-books"
-        element={
-          <Layout>
-            <MyBooksPage />
-          </Layout>
-        }
-      />
-      {/* Favorite Page */}
-      <Route
-        path="/favorite"
-        element={
-          <Layout>
-            <FavoritePage />
-          </Layout>
-        }
-      />
-      {/* Login Page */}
-      <Route
-        path="/login"
-        element={
-          <Layout>
-            <LoginPage />
-          </Layout>
-        }
-      />
-      {/* Login Page */}
-      <Route
-        path="/login"
-        element={
-          <Layout>
-            <LoginPage />
-          </Layout>
-        }
-      />
-      {/* Register Page */}
-      <Route
-        path="/register"
-        element={
-          <Layout>
-            <RegisterPage />
-          </Layout>
-        }
-      />
-    </Routes>
+    <QueryClientProvider client={queryClient}>
+      <Routes>
+        {/* Home Page  */}
+        <Route element={<ProtectedRoute />}>
+          <Route
+            path="/"
+            element={
+              <Layout showHero={true}>
+                <HomePage />
+              </Layout>
+            }
+          />
+        </Route>
+        {/* My Books Pages */}
+        <Route element={<ProtectedRoute />}>
+          <Route
+            path="/my-books"
+            element={
+              <Layout>
+                <MyBooksPage />
+              </Layout>
+            }
+          />
+        </Route>
+        {/* Favorite Page */}
+        <Route element={<ProtectedRoute />}>
+          <Route
+            path="/favorite"
+            element={
+              <Layout>
+                <FavoritePage />
+              </Layout>
+            }
+          />
+        </Route>
+        {/* Login Page */}
+        <Route
+          path="/login"
+          element={
+            <Layout>
+              <LoginPage />
+            </Layout>
+          }
+        />
+        {/* Register Page */}
+        <Route
+          path="/register"
+          element={
+            <Layout>
+              <RegisterPage />
+            </Layout>
+          }
+        />
+      </Routes>
+    </QueryClientProvider>
   );
 }
 

@@ -1,10 +1,53 @@
-import express, { Request, Response } from "express";
+import { Request, Response } from "express";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import { validationResult } from "express-validator";
 import { UserModel } from "../models/UserModel";
-import { env } from "process";
 import { BookModel } from "../models/BookModel";
+
+/**
+ * Validates a user's authentication token from cookies.
+ *
+ * This function checks the presence and validity of a JWT (JSON Web Token)
+ * stored in the user's cookies. If the token is valid and contains a user ID,
+ * the function responds with a success message. Otherwise, it responds with an
+ * error message indicating authentication failure.
+ *
+ * @param {Request} req - The Express request object, containing the user's HTTP request details.
+ * @param {Response} res - The Express response object, used to send a response back to the client.
+ * @returns {Promise<Response | void>} - A promise that resolves to an HTTP response
+ * indicating the authentication status, or void if the response is already sent.
+ *
+ * Workflow:
+ * 1. Extract the token from the cookies.
+ * 2. Log the token for debugging purposes.
+ * 3. Check if the token is missing; if so, respond with an unauthorized status.
+ * 4. Verify the token using the JWT library and the secret key.
+ * 5. Extract the user ID from the decoded token.
+ * 6. If the user ID is missing, respond with an unauthorized status.
+ * 7. If everything is valid, respond with an authenticated status.
+ * 8. Handle any errors during the process by responding with an unauthenticated status.
+ *
+ * @throws {Error} If token verification fails or an unexpected error occurs.
+ *
+ * @path /api/user/validate
+ */
+const validateToken = async (req: Request, res: Response): Promise<Response | void> => {
+  try {
+    const token = req.cookies["user_auth_token"];
+
+    if (!token) return res.status(301).json({ message: "Unauthorized" });
+
+    const decoded = jwt.verify(token, process.env.USER_JWT_KEY as string);
+    const userId = (decoded as JwtPayload).userId;
+
+    if (!userId) return res.status(301).json({ message: "Unauthorized" });
+
+    return res.status(200).json({ message: "Authenticated" });
+  } catch (error) {
+    return res.status(301).json({ message: "Unauthenticated" });
+  }
+};
 
 /**
  * userRegister - @async Function that creates new user if not exists and generates
@@ -117,4 +160,4 @@ const userBooks = async (req: Request, res: Response): Promise<Response | void> 
   }
 };
 
-export { userRegister, userLogin, userLogout, userBooks };
+export { userRegister, userLogin, userLogout, userBooks, validateToken };

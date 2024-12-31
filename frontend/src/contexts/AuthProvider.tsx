@@ -3,8 +3,7 @@ import { useNavigate } from "react-router";
 
 interface Props {
   isAuthenticated: boolean;
-  isAdmin: boolean;
-  login: (admin: boolean) => void;
+  login: () => void;
   logout: () => void;
 }
 
@@ -12,23 +11,20 @@ const AuthContext = createContext<Props | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
 
-  const login = (admin: boolean) => {
+  const login = () => {
     setIsAuthenticated(true);
-    setIsAdmin(admin);
-    navigate(admin ? "/admin" : "/");
+    navigate("/");
   };
 
   const logout = () => {
     setIsAuthenticated(false);
-    setIsAdmin(false);
     navigate("/login");
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, isAdmin, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

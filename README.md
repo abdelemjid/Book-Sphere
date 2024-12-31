@@ -10,7 +10,7 @@ This platform is a full-stack MERN app built with:
 - `Node.js`, which is a powerful runtime environment for developing server-side apps with TypeScript.
 - `Tailwind CSS` is a utility-first CSS framework that allows developers to quickly create custom designs without writing custom styles by using pre-defined classes.
 
-### 🔐 Admin Authentication
+### 🔐 Seller Authentication
 
 The website could have multiple vendors, with each admin having their credentials to access their store.
 

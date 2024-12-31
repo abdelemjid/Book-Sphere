@@ -4,6 +4,8 @@ import { body } from "express-validator";
 
 const router = express.Router();
 
+router.post("/validate", userController.validateToken as express.RequestHandler);
+
 router.post(
   "/register",
   [

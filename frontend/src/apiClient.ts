@@ -1,4 +1,4 @@
-import { AdminRegisterFormValues, LoginFormValues, UserRegisterFormValues } from "./types/Types";
+import { LoginFormValues, UserRegisterFormValues } from "./types/Types";
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL as string;
 
@@ -37,48 +37,6 @@ export const fetchBooks = async () => {
 
 export const userLogout = async () => {
   return fetch(`${backendUrl}/api/user/logout`, {
-    method: "get",
-    credentials: "include",
-  });
-};
-
-//----------------------- ADMIN -----------------------
-
-export const registerAdmin = async (values: AdminRegisterFormValues): Promise<Response> => {
-  return fetch(`${backendUrl}/api/admin/register`, {
-    method: "post",
-    credentials: "include",
-    headers: {
-      "content-type": "application/json",
-    },
-    body: JSON.stringify(values),
-  });
-};
-
-export const adminBooks = async (): Promise<Response> => {
-  return fetch(`${backendUrl}/api/admin/books`, {
-    method: "get",
-    credentials: "include",
-  });
-};
-
-export const addBook = async (formData: FormData) => {
-  return fetch(`${backendUrl}/api/admin/add-book`, {
-    method: "post",
-    credentials: "include",
-    body: formData,
-  });
-};
-
-export const validateAuth = async () => {
-  return fetch(`${backendUrl}/api/validate-token`, {
-    method: "post",
-    credentials: "include",
-  });
-};
-
-export const validateAdminToken = async () => {
-  return fetch(`${backendUrl}/api/admin/validate-token`, {
     method: "get",
     credentials: "include",
   });
