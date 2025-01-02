@@ -1,3 +1,5 @@
+import mongoose from "mongoose";
+
 export interface UserType {
   username: string;
   email: string;
@@ -5,7 +7,7 @@ export interface UserType {
 }
 
 export interface BookType {
-  adminId: string;
+  adminId: mongoose.Types.ObjectId;
   title: string;
   author: string;
   pages: number;
@@ -27,8 +29,13 @@ export interface AdminType extends UserType {
 }
 
 export interface OrderType {
-  userId: string;
-  bookId: string;
+  _id: mongoose.Schema.Types.ObjectId;
+  userId: mongoose.Schema.Types.ObjectId;
+  adminId: mongoose.Schema.Types.ObjectId;
+  bookId: mongoose.Schema.Types.ObjectId;
   quantity: number;
+  totalPrice: number;
   orderDate: Date;
+  delivered: boolean;
+  paid: boolean;
 }

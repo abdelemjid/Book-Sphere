@@ -5,6 +5,7 @@ import { validationResult } from "express-validator";
 import { AdminModel } from "../models/AdminModel";
 import { BookModel } from "../models/BookModel";
 import { uploadImage } from "../utils/Uploader";
+import mongoose from "mongoose";
 
 /**
  * adminRegister - @async Function that register admins and generates admin token
@@ -129,7 +130,7 @@ const addBook = async (req: Request, res: Response): Promise<Response | void> =>
 
     const book = new BookModel(req.body);
     book.bookImageUrl = imageUrl;
-    book.adminId = req.adminId;
+    book.adminId = new mongoose.Types.ObjectId(req.adminId);
     await book.save();
 
     return res.status(200).json({ message: "Book published successfully.", book });

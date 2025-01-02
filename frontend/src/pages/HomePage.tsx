@@ -4,9 +4,11 @@ import { BookType } from "../types/Types";
 import { toast } from "react-toastify";
 import Book from "../components/Book";
 import RecentBooks from "../components/sections/RecentBooks";
+import { useOrderBook } from "../api/Order";
 
 const HomePage = () => {
   const [books, setBooks] = useState<BookType[] | undefined>(undefined);
+  const { isOrderError, isOrderLoading, orderBook, orderError } = useOrderBook();
 
   // fetch books
   useEffect(() => {
@@ -32,7 +34,16 @@ const HomePage = () => {
     const clickedElement = event.target as HTMLElement;
     if (clickedElement.id.startsWith("cart")) {
       const id = clickedElement.id.split("cart-")[1];
-      console.log(id);
+
+      const order = orderBook({ bookId: id, quantity: 1 });
+
+      if (!orderError && isOrderLoading) {
+        return <h1 className="text-center text-lg">Ordering...</h1>;
+      }
+
+      if (!orderError && !isOrderError && !isOrderLoading) {
+        console.log("Ordered:", order);
+      }
     } else {
       const parentElement = clickedElement.parentElement;
       console.log(parentElement?.id);

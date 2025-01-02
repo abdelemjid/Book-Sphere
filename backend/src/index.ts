@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 import { v2 as cloudinary } from "cloudinary";
 import userRouter from "./routers/UserRouter";
 import adminRouter from "./routers/AdminRouter";
+import userOrderRouter from "./routers/OrderRouter";
 
 const app = express();
 
@@ -36,6 +37,7 @@ app.use(
 
 // app routers
 app.use("/api/user", userRouter);
+app.use("/api/user", userOrderRouter);
 app.use("/api/admin", adminRouter);
 
 app.listen(7000, () => {

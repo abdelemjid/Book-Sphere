@@ -2,9 +2,9 @@ import mongoose, { Model, Schema } from "mongoose";
 import { BookType } from "../types/Types";
 
 const bookSchema = new Schema<BookType>({
-  adminId: { type: String, required: true },
+  adminId: { type: mongoose.Schema.Types.ObjectId, ref: "admin", required: true },
   title: { type: String, required: true },
-  author: { type: String, requied: true },
+  author: { type: String, required: true },
   description: { type: String, required: true, default: "No description provided!" },
   genres: { type: [String], required: true },
   isbn: { type: String, required: true },

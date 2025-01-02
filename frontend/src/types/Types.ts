@@ -37,3 +37,22 @@ export interface BookType {
   stockQuantity: number;
   bookCover: string;
 }
+
+export interface OrderType {
+  _id: string;
+  userId: string;
+  bookId: string;
+  quantity: number;
+  totalPrice: number;
+  orderDate: Date;
+  delivered: boolean;
+  paid: boolean;
+  bookDetails: [
+    {
+      author: string;
+      bookImageUrl: string;
+      price: number;
+      title: string;
+    }
+  ];
+}
