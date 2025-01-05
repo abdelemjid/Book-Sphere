@@ -1,6 +1,6 @@
 import express from "express";
 import * as userController from "../controllers/UserController";
-import { body } from "express-validator";
+import { body, param } from "express-validator";
 
 const router = express.Router();
 
@@ -36,5 +36,17 @@ router.post(
 router.get("/logout", userController.userLogout as express.RequestHandler);
 
 router.get("/books", userController.userBooks as express.RequestHandler);
+
+router.get(
+  "/book/:bookId",
+  [
+    param("bookId")
+      .notEmpty()
+      .withMessage("Invalid book ID")
+      .isLength({ min: 24 })
+      .withMessage("Invalid book ID"),
+  ],
+  userController.userBook as express.RequestHandler
+);
 
 export default router;

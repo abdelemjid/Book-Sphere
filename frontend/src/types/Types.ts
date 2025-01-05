@@ -35,7 +35,8 @@ export interface BookType {
   description: string;
   price: number;
   stockQuantity: number;
-  bookCover: string;
+  bookCover?: string;
+  bookImageUrl: string;
 }
 
 export interface OrderType {

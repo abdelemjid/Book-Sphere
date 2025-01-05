@@ -18,8 +18,8 @@ export default {
       },
       // Font Size
       fontSize: {
-        xs: "0.5rem",
-        sm: "0.7rem",
+        xs: "0.7rem",
+        sm: "0.8rem",
         base: "0.9rem",
         xl: "1rem",
         "2xl": "1.5rem",

@@ -160,4 +160,20 @@ const userBooks = async (req: Request, res: Response): Promise<Response | void> 
   }
 };
 
-export { userRegister, userLogin, userLogout, userBooks, validateToken };
+const userBook = async (req: Request, res: Response): Promise<Response | void> => {
+  const errors = validationResult(req).array();
+  if (errors?.length > 0) return res.status(400).json({ message: errors[0].msg });
+
+  try {
+    const bookId = req.params.bookId;
+
+    const book = await BookModel.findOne({ _id: bookId });
+    if (!book) return res.status(404).json({ message: "Book not found!" });
+
+    return res.status(200).json(book);
+  } catch (error) {
+    return res.status(500).json({ message: "Something went wrong during the book fetching!" });
+  }
+};
+
+export { validateToken, userRegister, userLogin, userLogout, userBooks, userBook };

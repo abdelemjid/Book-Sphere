@@ -1,12 +1,44 @@
 import { X } from "lucide-react";
 import { OrderType } from "../types/Types";
+import { useRemoveOrder, useUpdateOrderQuantity } from "../api/OrderApi";
+import { Navigate } from "react-router";
+import { useEffect, useRef, useState } from "react";
 
 interface Props {
   order: OrderType;
 }
 
 const Order = ({ order }: Props) => {
-  console.log(order);
+  const { isUnorderError, isUnorderLoading, unorder, unorderError, isUnorderSuccess } =
+    useRemoveOrder();
+  const { updateQuantity } = useUpdateOrderQuantity();
+
+  const latestQuantity = useRef(order.quantity);
+  const [quantity, setQuantity] = useState<number>(order.quantity);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (latestQuantity.current !== quantity) {
+        updateQuantity({ orderId: order._id, quantity: quantity });
+        latestQuantity.current = quantity;
+      }
+      clearTimeout(timeout);
+    }, 1000);
+
+    return () => clearTimeout(timeout);
+  }, [updateQuantity, order, quantity]);
+
+  if (!isUnorderLoading && isUnorderError) {
+    return <h1 className="text-lg text-center text-red-500">{(unorderError as Error).message}</h1>;
+  }
+
+  if (isUnorderLoading && !isUnorderError) {
+    return <h1 className="text-lg text-center">Loading...</h1>;
+  }
+
+  if (isUnorderSuccess) {
+    return <Navigate to="/my-books" />;
+  }
 
   return (
     <div className="relative w-full flex flex-col md:flex-row gap-3 border border-slate-400/50 py-3 px-5">
@@ -33,20 +65,26 @@ const Order = ({ order }: Props) => {
           </span>
         </p>
         <div className="flex flex-row gap-4 items-center mt-5">
-          <button className="w-[40px] h-[40px] dark:text-black text-semibold rounded-md flex justify-center items-center bg-secondary-100 text-3xl">
+          <button
+            onClick={() => setQuantity(Math.max(1, quantity - 1))}
+            className="w-[40px] h-[40px] dark:text-black text-semibold rounded-md flex justify-center items-center bg-secondary-100 text-3xl"
+          >
             &lt;
           </button>
           <p className="text-sm">
             Quantity:
-            <span className="ml-5 text-primary-100 font-semibold text-base">{order.quantity}</span>
+            <span className="ml-5 text-primary-100 font-semibold text-base">{quantity}</span>
           </p>
-          <button className="w-[40px] h-[40px] dark:text-black text-semibold rounded-md flex justify-center items-center bg-secondary-100 text-3xl">
+          <button
+            onClick={() => setQuantity(quantity + 1)}
+            className="w-[40px] h-[40px] dark:text-black text-semibold rounded-md flex justify-center items-center bg-secondary-100 text-3xl"
+          >
             &gt;
           </button>
         </div>
         {/* Buttons  */}
         <button
-          onClick={() => console.log(`remove ${order._id}`)}
+          onClick={() => unorder(order._id)}
           className="absolute top-2 right-3 flex justify-center items-center text-red-500"
         >
           <X />

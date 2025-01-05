@@ -4,9 +4,11 @@ import { BookType } from "../types/Types";
 import { toast } from "react-toastify";
 import Book from "../components/Book";
 import RecentBooks from "../components/sections/RecentBooks";
-import { useOrderBook } from "../api/Order";
+import { useOrderBook } from "../api/OrderApi";
+import { useNavigate } from "react-router";
 
 const HomePage = () => {
+  const navigate = useNavigate();
   const [books, setBooks] = useState<BookType[] | undefined>(undefined);
   const { isOrderError, isOrderLoading, orderBook, orderError } = useOrderBook();
 
@@ -46,7 +48,7 @@ const HomePage = () => {
       }
     } else {
       const parentElement = clickedElement.parentElement;
-      console.log(parentElement?.id);
+      if (parentElement?.id) navigate(`/book/${parentElement?.id}`);
     }
   };
 

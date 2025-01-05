@@ -3,7 +3,7 @@ import { Link, Navigate } from "react-router";
 import * as apiClient from "../apiClient";
 import { useAuth } from "../contexts/AuthProvider";
 import { LoginFormValues } from "../types/Types";
-import { useTokenChcker } from "../api/TokenChecker";
+import { useTokenChcker } from "../api/TokenApi";
 
 const LoginPage = () => {
   const { login } = useAuth();

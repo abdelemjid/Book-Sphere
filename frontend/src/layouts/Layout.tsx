@@ -16,7 +16,7 @@ const Layout: React.FC<Props> = ({ children, showHero }) => {
         <Navbar />
       </NavProvider>
       {showHero && <Hero />}
-      <div className="min-h-screen">{children}</div>
+      <div className="min-h-[500px]">{children}</div>
       <Footer />
     </div>
   );

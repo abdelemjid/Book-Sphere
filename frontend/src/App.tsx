@@ -7,6 +7,8 @@ import FavoritePage from "./pages/FavoritePage";
 import RegisterPage from "./pages/RegisterPage";
 import { QueryClient, QueryClientProvider } from "react-query";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import OrderPage from "./pages/OrderPage";
+import BookPage from "./pages/BookPage";
 
 function App() {
   const queryClient = new QueryClient();
@@ -43,6 +45,28 @@ function App() {
             element={
               <Layout>
                 <FavoritePage />
+              </Layout>
+            }
+          />
+        </Route>
+        {/* Order Page */}
+        <Route element={<ProtectedRoute />}>
+          <Route
+            path="/order/:orderId"
+            element={
+              <Layout>
+                <OrderPage />
+              </Layout>
+            }
+          />
+        </Route>
+        {/* Book Page */}
+        <Route element={<ProtectedRoute />}>
+          <Route
+            path="/book/:bookId"
+            element={
+              <Layout>
+                <BookPage />
               </Layout>
             }
           />

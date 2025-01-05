@@ -14,8 +14,8 @@
   scrollbar-width: none;
 }
 
-@layer {
+@layer base {
   body {
-    @apply text-base font-medium;
+    @apply text-sm font-normal;
   }
 }
