@@ -1,5 +1,6 @@
-import express from "express";
+import express, { query } from "express";
 import * as userController from "../controllers/UserController";
+import * as bookController from "../controllers/BooksController";
 import { body, param } from "express-validator";
 
 const router = express.Router();
@@ -48,5 +49,7 @@ router.get(
   ],
   userController.userBook as express.RequestHandler
 );
+
+router.get("/books/related", bookController.getRelatedBooks as express.RequestHandler);
 
 export default router;

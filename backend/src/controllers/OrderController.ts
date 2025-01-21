@@ -1,9 +1,11 @@
 import { Request, Response } from "express";
-import { validationResult } from "express-validator";
+import { checkSchema, validationResult } from "express-validator";
 import { BookModel } from "../models/BookModel";
 import { OrderModel } from "../models/OrderModel";
 import { ObjectId } from "mongodb";
-import { on } from "events";
+import Stripe from "stripe";
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
 const orderBook = async (req: Request, res: Response): Promise<Response | void> => {
   const errors = validationResult(req).array();
@@ -159,4 +161,84 @@ const getOrder = async (req: Request, res: Response): Promise<Response | void> =
   }
 };
 
-export { orderBook, getOrders, removeOrder, updateQuantity, getOrder };
+const confirmOrders = async (req: Request, res: Response): Promise<Response | void> => {
+  // confirmation query validation
+  try {
+    const result = checkSchema({
+      ids: {
+        in: ["query"],
+        custom: {
+          options: (value) => {
+            if (typeof value === "string" && value.length >= 24) return true;
+            if (
+              Array.isArray(value) &&
+              value.every((item) => typeof item === "string" && item.length >= 24)
+            ) {
+              return true;
+            }
+            throw new Error("Invalid ID or IDs");
+          },
+        },
+      },
+    });
+
+    const errors = validationResult(result).array();
+    if (errors?.length > 0) return res.status(400).json({ message: errors[0].msg });
+  } catch (error) {
+    return res.status(400).json({ message: (error as Error).message });
+  }
+  // fetch books and calculate the total
+  try {
+    const { ids } = req.query;
+
+    let total = 0;
+    let calculatedOrders: string[] = [];
+
+    const orders = await OrderModel.find({
+      _id: {
+        $in: ids,
+      },
+    });
+
+    for (let i = 0; i < orders.length; i++) {
+      const book = await BookModel.findOne({ _id: orders[i].bookId });
+      if (book) {
+        console.log("Book price:", book?.price, "quantity:", orders[i]?.quantity);
+        total += book?.price * orders[i].quantity;
+        calculatedOrders.push(orders[i]._id.toString());
+      }
+    }
+
+    console.log("Total Amount:", total);
+    console.log("Calculated orders:", calculatedOrders);
+
+    // create payment intent
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: total,
+      currency: "USD",
+      metadata: {
+        userId: req.userId,
+        orders: JSON.stringify(calculatedOrders),
+      },
+    });
+
+    if (!paymentIntent.client_secret) {
+      return res.status(500).json({ message: "Error creating payment intent!" });
+    }
+
+    const response = {
+      paymentIntentId: paymentIntent.id,
+      clientSecret: paymentIntent.client_secret.toString(),
+      totalCost: total,
+    };
+
+    return res.status(200).json(response);
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ message: "Something went wrong during the confirmation process!" });
+  }
+};
+
+export { orderBook, getOrders, removeOrder, updateQuantity, getOrder, confirmOrders };

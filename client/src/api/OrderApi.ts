@@ -51,9 +51,9 @@ export const useGetOrders = () => {
     return result;
   };
 
-  const { error, isError, isLoading, data } = useQuery("getOrders", orders);
+  const { error, isError, isLoading, data, refetch: refetchOrders } = useQuery("getOrders", orders);
 
-  return { isError, error, isLoading, data };
+  return { isError, error, isLoading, data, refetchOrders };
 };
 
 export const useRemoveOrder = () => {
@@ -138,4 +138,30 @@ export const useGetOrder = (orderId: string | undefined) => {
   const { error, isError, isLoading, data: order } = useQuery("getOrder", getOrder);
 
   return { isError, error, isLoading, order };
+};
+
+export const useConfirmOrders = () => {
+  const confirm = async (query: string) => {
+    const response = await fetch(`${API_BASE_URL}/api/user/confirm?${query}`, {
+      method: "GET",
+      credentials: "include",
+    });
+
+    const result = await response.json();
+    if (!response.ok) {
+      throw new Error(result.message);
+    }
+
+    return result;
+  };
+
+  const {
+    error: confirmError,
+    isError: isConfirmError,
+    isLoading: isConfirmLoading,
+    mutate: confirmOrders,
+    data,
+  } = useMutation(confirm);
+
+  return { confirmError, isConfirmError, isConfirmLoading, confirmOrders, data };
 };

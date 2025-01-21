@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { validationResult } from "express-validator";
+import { checkSchema, validationResult } from "express-validator";
 import { BookModel } from "../models/BookModel";
 import { uploadImage } from "../utils/Uploader";
 
@@ -71,4 +71,74 @@ const deleteBook = async (req: Request, res: Response): Promise<Response | void>
   }
 };
 
-export { getBook, updateBook, deleteBook };
+/**
+ * @async Function that fetches the related books depending on a book genres
+ *
+ * @param req Express Request that contains the query params of [Genres, Current Books ID]
+ * @param res Express Response that returns the related books or an Error messsage
+ * @returns Relates books with 200 status code, Validation error with 400 status code or
+ *          Internal error with 500 status code
+ *
+ * @example GET /api/user/books/related
+ */
+const getRelatedBooks = async (req: Request, res: Response): Promise<Response | void> => {
+  // validate the query params
+  try {
+    const result = await checkSchema({
+      genres: {
+        in: ["query"],
+        custom: {
+          options: (value) => {
+            if (typeof value === "string") return true;
+            if (Array.isArray(value) && value.every((item) => typeof item === "string"))
+              return true;
+            throw new Error("Genres must contains at least 1 Genre!");
+          },
+        },
+      },
+      current: {
+        in: ["query"],
+        isString: {
+          errorMessage: "Current book ID must be a string!",
+        },
+        isLength: {
+          options: {
+            min: 24,
+          },
+          errorMessage: "Invalid Book ID!",
+        },
+      },
+    }).run(req);
+
+    const errors = validationResult(result).array();
+    if (errors?.length > 0) return res.status(400).json({ message: errors[0].msg });
+  } catch (error) {
+    return res.status(400).json({ messge: (error as Error).message });
+  }
+  // fetch the related books
+  try {
+    const { genres, current } = req.query;
+
+    if (genres === undefined || genres.length === 0)
+      return res.status(400).json({ message: "Invalide search query!" });
+    if (current === undefined || current.length === 0)
+      return res.status(400).json({ message: "Invalid current book ID" });
+
+    const genersArray = genres?.toString().split(",");
+
+    const books = await BookModel.find({
+      _id: { $ne: current },
+      genres: { $in: genersArray },
+    });
+    if (!books) return res.status(404).json({ message: "No related books found" });
+
+    return res.status(200).json(books);
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .json({ message: "Something went wrong during fetching the related books" });
+  }
+};
+
+export { getBook, updateBook, deleteBook, getRelatedBooks };

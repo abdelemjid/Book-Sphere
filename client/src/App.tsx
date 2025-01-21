@@ -9,6 +9,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import OrderPage from "./pages/OrderPage";
 import BookPage from "./pages/BookPage";
+import ConfirmationPage from "./pages/ConfirmationPage";
 
 function App() {
   const queryClient = new QueryClient();
@@ -67,6 +68,17 @@ function App() {
             element={
               <Layout>
                 <BookPage />
+              </Layout>
+            }
+          />
+        </Route>
+        {/* Confirmation Page */}
+        <Route element={<ProtectedRoute />}>
+          <Route
+            path="/confirm/:ids"
+            element={
+              <Layout>
+                <ConfirmationPage />
               </Layout>
             }
           />

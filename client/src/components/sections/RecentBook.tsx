@@ -13,14 +13,17 @@ const RecentBook = ({ book, onClick }: Props) => {
       onClick={onClick}
       key={book._id}
       id={book._id}
-      className="min-w-[300px] flex flex-row justify-between duration-200 hover:bg-dark-400/10 dark:hover:bg-light-100/10 border border-dark-400/20 dark:border-light-100/20 rounded-md overflow-hidden"
+      className="min-w-[300px] flex flex-col sm:flex-row justify-center items-center sm:items-center sm:justify-between duration-200 hover:bg-dark-400/10 dark:hover:bg-light-100/10 border border-dark-400/20 dark:border-light-100/20 rounded-md overflow-hidden"
     >
       {/* Book Image  */}
       <div id={book._id} className="flex-1 flex flex-col items-start">
-        <img className="w-[180px] h-[298px]" src={book.bookCover} alt="Book image" />
+        <img className="w-[180px] h-[298px] object-cover" src={book.bookCover} alt="Book image" />
       </div>
       {/* Book Information */}
-      <div id={book._id} className="flex-1 flex flex-col justify-around gap-2">
+      <div
+        id={book._id}
+        className="flex-1 flex flex-col justify-around items-center p-5 sm:p-0 sm:items-start gap-2"
+      >
         {/* Book Title  */}
         <h1 className="line-clamp-2 my-1">{book.title}</h1>
         {/* Book Author  */}
